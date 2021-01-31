@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" id="input">
+    <div>
+      TODO:
+      <span id="text"></span>
+    </div>
+    <button id="btn">Add to Todo List</button>
+    <ul id="list"></ul>
+  </div>
+  <script>
+    const input = document.getElementById('input')
+    const text = document.getElementById('text')
+    const btn = document.getElementById('btn')
+    const list = document.getElementById('list')
+
+    let render
+    
+    class Render{
+      constructor(arr){
+        this.arr = arr
+      }
+
+      init(){
+        const fragment = document.createDocumentFragment()
+        this.arr.forEach(value => {
+          const li = document.createElement('li')
+          li.textContent = value
+        
+          fragment.appendChild(li)
+        });
+        list.appendChild(fragment)
+      }
+
+      addList(val){
+        const li = document.createElement('li')
+        li.textContent = val
+        list.appendChild(li)
+      }
+    }
+
+    //与input单向绑定   obj--->DOM
+    const inputObj = new Proxy({},{
+      get(target,key,receiver){
+        return Reflect.get(target,key,receiver)
+      },
+      set(target,key,value,receiver){
+        if(key === 'value'){
+          //obj修改DOM
+          input.value = value
+          text.innerHTML = value
+        }
+        return Reflect.set(target,key,value,receiver)
+      }
+    })
+
+    //与list数据单向绑定  obj--->DOM
+    const todoList = new Proxy([],{
+      get(target,key,receiver){
+        return Reflect.get(target,key,receiver)
+      },
+      set(target,key,value,receiver){
+        //出现了修改todoList的length的操作,我们只实现了添加即push,所以直接添加
+        //让DOM也修改  push的实现是arr[length] = value   length++  触发了两次set 所以除了length都是push
+        console.log(key);
+        if(key !== 'length'){
+          render.addList(value)
+        }
+        return Reflect.set(target,key,value,receiver)
+      }
+    })
+
+    //初始化todolist
+    window.onload = () => {
+      render = new Render([])
+      //obj--->DOM
+      render.init()
+    }
+
+    //DOM--->obj  监听DOM时间
+    input.addEventListener('keyup',e => {
+      inputObj.value = e.target.value
+    })
+
+    btn.addEventListener('click',e => {
+      //todoList其实就只有单向绑定,obj---->DOM,因为我们没有DOM删除的操作
+      //如果要加入DOM删除实现双向绑定就会很麻烦，因为删除就需要key值来标识删除哪一个
+      //不用key值用下标的话，删一个就会让下标混乱，因为绑定在addEvent上的splice(index,1)的index是定值
+      //而且要更改Proxy，把key与length进行比较,==length说明是push,<length,说明是删除
+      todoList.push(inputObj.value)
+      //因为我上面已经实现了input的双向绑定所以DOM上的input也会被修改为''
+      inputObj.value = ''
+    })
+
+
+  </script>
+</body>
+</html>
