@@ -1,21 +1,23 @@
-function test(arr,tar){
-  let obj = {}
-  //forEach无法中断,所以要用for
-  // arr.forEach((v,index) => {
-  //   if(obj[tar-v]!=undefined){
-  //     return [obj[tar-v],index]
-  //   }else{
-  //     obj[v] = index
-  //   }
-  // })
-  for(let index = 0;index<arr.length;index++){
-    let v = arr[index]
-        if(obj[tar-v]!=undefined){
-      return [obj[tar-v],index]
-    }else{
-      obj[v] = index
+class Event{
+  constructor(){
+    // {a:callback[],b:}
+    this.listeners = {}
+  }
+
+  on(eventName,callback){
+    if(!this.listeners[eventName])
+      this.listeners[eventName] = []
+    this.listeners[eventName].push(callback)
+  }
+
+  emit(eventName,data){
+    if(this.listeners[eventName]){
+      this.listeners[eventName].forEach(event => event(data))
     }
   }
-  return false
+
 }
-console.log(test( [2, 7, 11, 15],9));
+
+let e = new Event()
+e.on('a',(data) => {console.log(data);})
+e.emit('a','发布事件')

@@ -14,8 +14,9 @@ Function.prototype.my_call = function(){
   newThis._func = this
   let result = newThis._func(...args)
   //因为本来没有func属性，所以要删除
-  // delete newThis.func;  这样删除性能太差了 我觉得还是设置成undefined好一点
-  newThis._func = undefined
+  delete newThis.func;  
+  //或者
+  // newThis._func = undefined
   return result
 }
 

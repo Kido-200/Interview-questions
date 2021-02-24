@@ -1,42 +1,25 @@
-function MessageCenter(){
-  //存放消息
-  let message = {} 
-  
-  //消息注册
-  this.register = function(messageType){
-    if(typeof message[messageType]=='undefined'){
-      message[messageType] = []
-    }else{
-      console.log('消息已被注册');
+class Event{
+  constructor(){
+    // {a:callback[],b:}
+    this.listeners = {}
+  }
+
+  on(eventName,callback){
+    if(!this.listeners[eventName])
+      this.listeners[eventName] = []
+    this.listeners[eventName].push(callback)
+  }
+
+  emit(eventName,data){
+    const callbacks = this.listeners[eventName]
+    if(callbacks){
+      callbacks.forEach(event => event(data))
     }
   }
 
-  //消息订阅 ,给消息数组里添加上该回调函数
-  this.subscribe = function(messageType,fn){
-    if(typeof message[messageType] != 'undefined'){
-      message[messageType].push(fn)
-    }else{
-      console.log('没有这种消息,无法订阅');
-    }
-  }
-
-  //消息发布, args是要操作的数据
-  this.emit = function(messageType,args){
-    let events = {
-      type:messageType,
-      args: args || {}
-    }
-    if(typeof message[messageType] != 'undefined'){
-      message[messageType].forEach(fn => {
-        fn(events)
-      })
-    }else{
-      console.log('没有这种消息,无法发布');
-    }
-  }
 }
 
-let center = new MessageCenter()
-center.register('a')
-center.subscribe('a',(data)=>console.log(data))
-center.emit('a',['data1','data2'])
+//emit根本不关心有没有这个人订阅了,发就完事儿了
+let e = new Event()
+e.on('a',(data) => {console.log(data);})
+e.emit('a','发布事件')

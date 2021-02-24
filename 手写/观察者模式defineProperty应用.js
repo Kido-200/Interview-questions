@@ -47,8 +47,7 @@ class Observer{
   }
 }
 
-//on他就可以观察他的变化了
-//观察的是{a:1,b:2}
+//实现以下功能
 let data = new Observer({a:1,b:2});
 console.log(data.a);//1
 data.$on('a',(newVal,oldVal)=>{
