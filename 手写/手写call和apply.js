@@ -10,11 +10,12 @@ Function.prototype.my_call = function(){
     //global是node环境的  window是浏览器
     newThis = typeof window === 'undefined' ? global : window
   }
+  let _func = Symbol('_func')
   //因为 func.call这样调用的  所以this=func
-  newThis._func = this
-  let result = newThis._func(...args)
+  newThis[_func] = this
+  let result = newThis[_func](...args)
   //因为本来没有func属性，所以要删除
-  delete newThis.func;  
+  delete newThis[_func];  
   //或者
   // newThis._func = undefined
   return result
@@ -28,8 +29,7 @@ Function.prototype.my_apply = function(){
   }
   newThis._func = this
   let result = newThis._func(...args)
-  // delete newThis._func
-  newThis._func = undefined
+  delete newThis._func
   return result
 }
 
@@ -39,9 +39,9 @@ Function.prototype.my_bind = function() {
   var self = this, // 保存原函数
   // 等价于 context = [].shift.call(arguments);
   context = Array.prototype.shift.call(arguments), // 保存需要绑定的this上下文
-  args = Array.prototype.slice.call(arguments); // 剩余的参数转为数组
+  args = Array.from(arguments); // 剩余的参数转为数组
   return function() { // 返回一个新函数
-    self.my_apply(context, args.concat(Array.prototype.slice.call(arguments)));
+    return self.my_apply(context, args.concat(Array.from(arguments)));
   }
 }
 
@@ -55,3 +55,4 @@ function test(){
 test.my_call(a,'call')
 test.my_apply(a,['apply'])
 test.my_bind(a,'xx','xx')('bind','xx')
+

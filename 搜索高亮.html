@@ -56,11 +56,11 @@
   }
 
   function handleInput(value) {
-    const reg = new RegExp(`\(${value}\)`);
+    const reg = new RegExp(`(${value})`,'g');
+    
     const search = data.reduce((res, cur) => {
       if (reg.test(cur)) {
-        const match = RegExp.$1;
-        res.push(`<li>${cur.replace(match, '<bdi>$&</bdi>')}</li>`);
+        res.push(`<li>${cur.replace(reg, '<bdi>$&</bdi>')}</li>`);
       }
       return res;
     }, []);
@@ -74,5 +74,6 @@
   document.querySelector('.inp').addEventListener('input', debounce(e => {
     memorizeInput(e.target.value);
   }))
+
 </script>
 </html>

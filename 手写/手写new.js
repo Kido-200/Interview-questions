@@ -7,12 +7,10 @@ function _new(fn, ...arg) {
 
 
 function _new(){
-  //先创一个对象
-  let target = {}
-  console.log(arguments);
+  //先创一个对象  原型连接
+  let target = Object.create(constructor.prototype)
   let [constructor,...args] = [...arguments]
-  //原型连接
-  target.__proto__ = constructor.prototype
+
   let result = constructor.apply(target,args)
   //如果构造函数是一个对象，那么返回这个对象
   if(result && (typeof (result) == 'object'|| typeof(result)=='function')){

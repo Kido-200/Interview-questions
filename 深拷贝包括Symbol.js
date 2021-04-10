@@ -35,22 +35,19 @@ function deepClone(obj, hash = new WeakMap()) {
   return cobj;
 }
 
-
-function deepclone(obj,hash = new WeakMap()){
+function deepclone(obj,hash = new WeakMap){
   if(hash.has(obj)) return hash.get(obj)
-  if(Array.isArray(obj)){
-    return obj.reduce((res,v)=>{
-      res.push(deepclone(v,hash))
-      return res
-    },[])
-  }else if(obj instanceof Object){
+  if(obj instanceof Object){
     let nObj = {}
+    if(Array.isArray(obj))
+      nObj = []
     hash.set(obj,nObj)
     Object.getOwnPropertyNames(obj).concat(Object.getOwnPropertySymbols(obj)).forEach(key => {
       nObj[key] = deepclone(obj[key],hash)
     })
     return nObj
   }
+
   return obj
 }
 
@@ -66,3 +63,4 @@ console.log(deepclone(null));
 console.log(deepclone(undefined));
 console.log(deepclone([1, { a: 9, b: 8 }, [3], [4, 5, [6, 7]]]));
 console.log(deepclone({ a: 1, b: { c: [4, 5, [6]], d: 7, e: { y: 8, z: 4 } } }));
+console.log(deepclone({ a:function(a){}}))

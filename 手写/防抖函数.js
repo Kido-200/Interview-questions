@@ -1,7 +1,7 @@
 //返回的函数就是个防抖函数了
 //immediate是true是执行函数后开定时器 
 //false是开启定时器,定时器到时间的时候执行
-function debounce(func,wait,immediate = true){
+function debounce(func,wait,immediate = false){
   let timeout,result
   //开启定时器,immediate =false的话定时器到时间的时候执行
   const later = (context , args) => setTimeout(()=>{
@@ -42,7 +42,7 @@ function debounce(func,wait,immediate = true){
 function t(){
   return new Date()
 }
-let x = debounce(t,10,true)
+let x = debounce(t,10)
 console.log(x());
 console.log(x());
 setTimeout(()=>{

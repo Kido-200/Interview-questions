@@ -122,6 +122,4 @@ new _Promise((resolve,reject)=>{
 }).then(value=>{
   console.log(value);
   return 3
-}).then(value => {
-  console.log(value);
 })

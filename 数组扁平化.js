@@ -8,6 +8,7 @@ function flattenDeep2(arr){
   ,[])
 }
 
+
 function flattenDeep3(input){
   const stack = [...input]
   const res = []

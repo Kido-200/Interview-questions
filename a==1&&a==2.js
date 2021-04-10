@@ -19,3 +19,20 @@ let b = {
   })()
 }
 console.log(b==1&&b==2);
+
+let c = {
+  i:1,
+  valueOf:function(){
+    console.log(this);
+    return this.i++
+  }
+}
+console.log(c==1&&c==2);
+
+let d = {
+  x:1,
+  test:()=>{
+    console.log(this);
+  }
+}
+d.test()
