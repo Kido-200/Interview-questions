@@ -1,26 +1,24 @@
-function SuperType(){
-  this.name = 'kido'
-  this.colors = ['pink']
+function SuperType(name){
+  this.name = name
 }
-
 SuperType.prototype.getName = function(){
   return this.name
 }
-function SubType(){
-  this.age = 20
-}
-SubType.prototype = new SuperType()
-//class.prototype的constructor指向自己
-SubType.prototype.construstor = SubType
-SubType.prototype.getAge = function(){
-  return this.age
+function SubType(name,age){
+  SuperType.call(this,name)
+  this.age = age
 }
 
+//就是让SubType的prototype的__proto__指向父亲的prototype,constructor指向自己
+function inheritPrototype(subType,superType){
+  let prototype = Object.create(superType.prototype)
+  //改一下constructor
+  prototype.constructor = subType
+  subType.prototype = prototype
+}
 
-let a1 = new SubType()
-a1.colors.push('yellow')
+inheritPrototype(SubType,SuperType);
+let a1 = new SubType('kido',20)
 console.log(a1.getName());
-console.log(a1.colors);
-
-let a2 = new SubType()
-console.log(a2.colors);
+console.log(a1.name);
+console.log(a1.age);
