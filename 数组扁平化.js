@@ -3,9 +3,18 @@ function flattenDeep(arr){
 }
 
 function flattenDeep2(arr){
-  return arr.reduce((acc,val) => Array.isArray(val)? acc.concat(flattenDeep2(val)): 
-  acc.concat(val)
-  ,[])
+  // return arr.reduce((acc,val) => Array.isArray(val)? acc.concat(flattenDeep2(val)): 
+  // acc.concat(val)
+  // ,[])
+  let res = [];
+  arr.forEach(v => {
+    if(Array.isArray[v]){
+      res.concat(flattenDeep2(v));
+    }else{
+      res.push(v);
+    }
+  })
+  return res;
 }
 
 
