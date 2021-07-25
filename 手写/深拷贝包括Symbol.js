@@ -27,7 +27,7 @@ function deepClone(obj, hash = new WeakMap()) {
               cobj[c] = deepClone(obj[c], hash);
           });
       } else {
-          //function
+          //function date
           //内置Object
           cobj = obj;
       }
