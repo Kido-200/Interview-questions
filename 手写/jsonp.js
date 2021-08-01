@@ -12,6 +12,7 @@ function jsonp({url,params,callback}){
     params = { ...params,callback}
     let arrs = []
     for(let key in params){
+      // encodeURIComponent(params[key]) 或者JSON.stringfy(params[key])会好一点
       arrs.push(`${key}=${params[key]}`)
     }
     script.src = `${url}?${arrs.join('&')}`
